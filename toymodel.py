@@ -48,14 +48,13 @@ def generateStates(process, rules, initial:list):
     initial: initial state(bid && ask)
     """
     states = []
-    indicator = getIndicator(initial[0], initial[1])
 
     for i in range(len(process)):
         time, event_type = process[i]
         dist, state = rules[event_type]
         add = dist.rvs()
         initial[state] += add
-        states.append((time, indicator))
+        states.append((time, getIndicator(initial[0], initial[1])))
 
     return states
 
