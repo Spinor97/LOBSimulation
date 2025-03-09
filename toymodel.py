@@ -37,7 +37,7 @@ def mockProcess(T, lambda_, mus, betas, num_events):
 
     return results
 
-def indicator(bid, ask):
+def getIndicator(bid, ask):
     return (bid - ask) / (ask + bid)
 
 def generateStates(process, rules, initial:list):
@@ -48,7 +48,7 @@ def generateStates(process, rules, initial:list):
     initial: initial state(bid && ask)
     """
     states = []
-    indicator = indicator(initial[0], initial[1])
+    indicator = getIndicator(initial[0], initial[1])
 
     for i in range(len(process)):
         time, event_type = process[i]
