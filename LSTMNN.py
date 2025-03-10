@@ -46,6 +46,7 @@ class stackCLSTM(nn.Module):
 
         self.Wh = Linear((input_size + hidden_size) * event_type, hidden_size * event_type)
         self.m_alpha = ParameterList([nn.Parameter(torch.ones(hidden_size) / hidden_size) for _ in range(event_type)])
+        self.Tanh = Tanh()
 
     def forward(self, x_time, dt_time):
         t_total, batch_size, _ = x_time.shape
@@ -82,7 +83,7 @@ class stackCLSTM(nn.Module):
             
             for j in range(self.event_type):
                 # Calculate cell state at time dt
-                c_t = curr_gs[j] + diffs[j] * torch.exp(-curr_deltas[j] * dt.unsqueeze(-1))
+                c_t = curr_gs[j] + diffs[j] * torch.exp(-curr_deltas[j] * dt)
                 # Calculate hidden state at time dt
                 h_t = curr_os[j] * self.Tanh(c_t)
                 
@@ -105,12 +106,19 @@ class stackCLSTM(nn.Module):
                 
                 batch_integrated_lambdas.append(torch.tensor(integrated_values, device=x.device))
             
-            lambda_rtn.append(batch_lambdas)
+            lambda_rtn.append(torch.stack(batch_lambdas, dim = 1)) 
             lambda_integrate.append(torch.stack(batch_integrated_lambdas).transpose(0, 1))
             
             # Update hidden and cell states for next timestep
             for k in range(self.event_type):
-                c_ini[k] = curr_gs[k] + diffs[k] * torch.exp(-curr_deltas[k] * dt.unsqueeze(-1))
+                c_ini[k] = curr_gs[k] + diffs[k] * torch.exp(-curr_deltas[k] * dt)
                 hidden_ini[k] = curr_os[k] * self.Tanh(c_ini[k])
 
         return lambda_rtn, lambda_integrate
+    
+if __name__ == "__main__":
+    model = stackCLSTM(2, 10, 2) # 2 input features, 10 hidden units, 2 event types
+    x = torch.randn(10, 100, 2) # 10 time steps, 100 batch size, 2 features
+    dt = torch.randn(10, 100, 1) # 10 time steps, 100 batch size, 1 feature(time difference)
+    lambda_end, lambda_integrate = model(x, dt)
+    print(lambda_end[0].shape, lambda_integrate[0].shape)
