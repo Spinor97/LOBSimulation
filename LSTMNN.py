@@ -4,6 +4,10 @@ from torch.nn import Sequential, Linear, LSTM, Sigmoid, ReLU, Dropout, Tanh, Mod
 
 from loss_function import integrateTrapezoid
 
+"""
+This snippet is to define the neural network model for the Hawkes process simulation.
+"""
+
 class CLSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(CLSTMCell, self).__init__()

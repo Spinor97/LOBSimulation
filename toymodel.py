@@ -1,6 +1,11 @@
 from scipy import stats
 import numpy as np
 
+"""
+this snippet is to make a simulation of Hawkes process with various type of events. 
+Curreently, the intensities of the events are independent of each other. In the future, I will add the dependency between the events.
+"""
+
 def sim_hawkes(T, lambda_, mu, beta):
     times = []
 
