@@ -1,0 +1,3 @@
+This personal project is to implement a simulation of limit order book using neural Hawkess process(see State Dependent Parallel Neural Hawkes Process for Limit Order Book Event Stream Prediction and Simulation by Shi, Z., & Cartlidge, J. P. (2022), and a recent one Event-Based Limit Order Book Simulation under a Neural Hawkes Process: Application in Market-Making by Luca Lalor and Anatoliy Swishchuk).
+
+Through this project, I want to not only gain insights of the microstructure of the market but also render these insights towards building up a reliable strategy considering as much as realistic factors as possible.
